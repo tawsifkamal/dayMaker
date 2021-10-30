@@ -11,9 +11,14 @@ app.use(express.json())
 // get driver connection
 const dbo = require("./db/conn")
 
-app.get("/test", (req, res) => {
+app.get("/test/:count", (req, res) => {
+  let count = parseInt(req.params.count)
+  res.send((count + 1).toString())
+})
+
+app.get("/fetch-test", (req, res) => {
   console.log("Test pass")
-  res.send("Test pass")
+  res.send("Fetch test passed lmao")
 })
 
 app.listen(5000, () => {
