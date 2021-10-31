@@ -8,14 +8,14 @@ const eol = require("eol");
 const { insertEvent } = require('./calendar');
 const { createEvent } = require('./calendar');
 
-const {DocumentProcessorServiceClient} = require('@google-cloud/documentai').v1;
+const { DocumentProcessorServiceClient } = require('@google-cloud/documentai').v1;
 
 // Instantiates a client
 // apiEndpoint regions available: eu-documentai.googleapis.com, us-documentai.googleapis.com (Required if using eu based processor)
 // const client = new DocumentProcessorServiceClient({apiEndpoint: 'eu-documentai.googleapis.com'});
 const client = new DocumentProcessorServiceClient();
 
-const documentAI = async function() {
+const documentAI = async function () {
   // The full resource name of the processor, e.g.:
   // projects/project-id/locations/location/processor/processor-id
   // You must create new processors in the Cloud Console first
@@ -39,10 +39,10 @@ const documentAI = async function() {
 
   // Recognizes text entities in the PDF document
   const [result] = await client.processDocument(request);
-  const {document} = result;
+  const { document } = result;
 
-  //Get all of the document text as one big string
-  const {text} = document;
+  //Get all of the document text as one string
+  const { text } = document;
   // Extract shards from the text field
   const getText = textAnchor => {
     if (!textAnchor.textSegments || textAnchor.textSegments.length === 0) {
@@ -55,29 +55,24 @@ const documentAI = async function() {
   };
   // Read the text recognition output from the processor
   const [page1] = document.pages;
-  const {paragraphs} = page1;
-  
+  const { paragraphs } = page1;
+
   for (const paragraph of paragraphs) {
     const paragraphText = getText(paragraph.layout.textAnchor);
     const entity = await entityExtractor(paragraphText);
 
     // Checking if the entity objecdt has a type date property
     if (entity.length != 0) {
-      // console.log("\n===================== Section With Date ===============");
-      // console.log('>>>>>>>> Paragraph <<<<<<<<<<')
-      // console.log(paragraphText);
 
-      // split paragraph into lines 
-      let lines =  eol.split(paragraphText);
+      // split paragraph into lines
+      let lines = eol.split(paragraphText);
 
       for (const [index, line] of lines.entries()) {
 
-        // NLP + DocAI 
+        // NLP + DocAI
         const lineEntity = await entityExtractor(line);
-        
+
         if (lineEntity.length != 0) {
-          // console.log(`********* Line ${index + 1} Date *********`);
-          // console.log(lineEntity[0].name);
 
           // Finding the title of that line with a date entity
           let title = line.replace(lineEntity[0].name, "");
@@ -91,34 +86,34 @@ const documentAI = async function() {
 
 
           if (isNaN(monthIndex) || isNaN(day)) {
-              console.log("No month/day was specified. This event cannot be created.")
+            console.log("No month/day was specified. This event cannot be created.")
           } else {
-                console.log("Event Detected!");
-                const event = createEvent(year, monthIndex, day, title);
-              
-                let eventObject = {
-                  subject: title,
-                  date: event.start.date,
-                  startTime: "",
-                  endTime: ""
-                }
-                events.push(eventObject);
-                console.log("event pushed to eventList");
-                // insertEvent(event); 
-            } 
+            console.log("Event Detected!");
+            const event = createEvent(year, monthIndex, day, title);
+
+            let eventObject = {
+              subject: title,
+              date: event.start.date,
+              startTime: "",
+              endTime: ""
+            }
+            events.push(eventObject);
+            console.log("event pushed to eventList");
+            // insertEvent(event);
           }
-          
-          // console.log(`>>>>>>>>>>>>>>>>> TITLE FOR LINE ${index + 1} DATE <<<<<<<<<<<<<<<<<<<<`)
-          // console.log(title);
         }
+
+        // console.log(`>>>>>>>>>>>>>>>>> TITLE FOR LINE ${index + 1} DATE <<<<<<<<<<<<<<<<<<<<`)
+        // console.log(title);
       }
     }
-    const eventList = {
-      name: filePath,
-      events: events
-    }
-
-    return eventList;
   }
+  const eventList = {
+    name: filePath,
+    events: events
+  }
+
+  return eventList;
+}
 
 module.exports = documentAI;

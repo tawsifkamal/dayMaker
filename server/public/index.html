@@ -1,26 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="google-signin-client_id" content="1047042295114-ik3qr4kt6i9aqteuhkqvajcg2kksvnlq.apps.googleusercontent.com">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.0.2/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" integrity="sha512-wnea99uKIC3TJF7v4eKk4Y+lMz2Mklv18+r4na2Gn1abDRPPOeef95xTzdwGD9e6zXJBteMIhZ1+68QC5byJZw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="style.css">
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <title>DayMaker</title>
-    <script>
-      $("#file-upload").css("opacity", "0");
 
-      $("#file-browser").click(function(e) {
-        e.preventDefault();
-        $("#file-upload").trigger("click");
-});
-    </script>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google-signin-client_id"
+    content="1047042295114-ik3qr4kt6i9aqteuhkqvajcg2kksvnlq.apps.googleusercontent.com">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.0.2/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"
+    integrity="sha512-wnea99uKIC3TJF7v4eKk4Y+lMz2Mklv18+r4na2Gn1abDRPPOeef95xTzdwGD9e6zXJBteMIhZ1+68QC5byJZw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="style.css">
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+  <title>DayMaker</title>
+  <script>
+    $("#file-upload").css("opacity", "0");
+
+    $("#file-browser").click(function (e) {
+      e.preventDefault();
+      $("#file-upload").trigger("click");
+    });
+  </script>
 </head>
+
 <body>
+  <img src="./daymaker.png" alt="daymakerlogo" width="200" height="150" class="center">
   <div class="wrapper">
     <form class="container" action="/" enctype="multipart/form-data" method="POST">
       <h1>Upload a file</h1>
@@ -32,14 +39,16 @@
             <i class="fas fa-file-pdf" data-fa-transform="shrink-3 down-2 right-6 rotate-45"></i>
           </div>
           <input type="file" name="file" id="file-upload">
-          <p>Drag and drop files here, or 
-            <a href="#" id="file-browser">browse</a> your computer.</p>
-          </div>
+          <p>Drag and drop files here, or
+            <a href="#" id="file-browser">browse</a> your computer.
+          </p>
         </div>
-        <div class="g-signin2" data-onsuccess="onSignIn"></div>
-      <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded"
-      >Let's go!</button>
+      </div>
+      <button type="submit"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded">Let's
+        go!</button>
     </form>
   </div>
 </body>
+
 </html>
