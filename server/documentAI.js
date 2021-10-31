@@ -1,10 +1,12 @@
-const path = require('path')
 const fs = require('fs');
 const entityExtractor = require("./entityExtractor.js");
 const projectId = 'peerless-haiku-291412';
 const location = 'us'; // Format is 'us' or 'eu'
 const processorId = '83eb2115a9ff84ef'; // Create processor in Cloud Console
-const filePath = '../app/assets/hist.pdf';
+const filePath = 'uploads/__target.pdf';
+const eol = require("eol");
+const { insertEvent } = require('./calendar');
+const { createEvent } = require('./calendar');
 
 const {DocumentProcessorServiceClient} =
   require('@google-cloud/documentai').v1;
@@ -52,25 +54,54 @@ const documentAI = async function() {
     return text.substring(startIndex, endIndex);
   };
   // Read the text recognition output from the processor
-  console.log('The document contains the following paragraphs:');
   const [page1] = document.pages;
   const {paragraphs} = page1;
   
   for (const paragraph of paragraphs) {
     const paragraphText = getText(paragraph.layout.textAnchor);
-    const date = await entityExtractor(paragraphText);
-    if (date.length != 0) {
-      console.log('******************** Section Date **********************');
-      console.log(date);
-      console.log('>>>>>>>>Subsequent Paragraph:')
-      console.log(paragraphText);
-    } else {
-      console.log("***************** Section *************");
-      console.log("NO DATE IN THIS PARAGRAPH");
+    const entity = await entityExtractor(paragraphText);
+
+    // Checking if the entity objecdt has a type date property
+    if (entity.length != 0) {
+      // console.log("\n===================== Section With Date ===============");
+      // console.log('>>>>>>>> Paragraph <<<<<<<<<<')
+      // console.log(paragraphText);
+
+      // split paragraph into lines 
+      let lines =  eol.split(paragraphText);
+
+      for (const [index, line] of lines.entries()) {
+        const lineEntity = await entityExtractor(line);
+        
+        if (lineEntity.length != 0) {
+          // console.log(`********* Line ${index + 1} Date *********`);
+          // console.log(lineEntity[0].name);
+
+          // Finding the title of that line with a date entity
+          let title = line.replace(lineEntity[0].name, "");
+          title = title.replace("–", "");
+
+          // MonthIndex is actually one less than the actual month (Jan starts at 0)
+          const monthIndex = parseInt(lineEntity[0].metadata.month - 1);
+          const day = parseInt(lineEntity[0].metadata.day);
+          const year = 2021;
+
+          if (isNaN(monthIndex) || isNaN(day)) {
+              console.log("No month/day was specified. This event cannot be created.")
+          } else {
+              console.log("Event Detected!");
+              const event = createEvent(year, monthIndex, day, title);
+              insertEvent(event);
+          }
+          
+          // console.log(`>>>>>>>>>>>>>>>>> TITLE FOR LINE ${index + 1} DATE <<<<<<<<<<<<<<<<<<<<`)
+          // console.log(title);
+        }
+      }
     }
   } 
 }
 
-documentAI();
+module.exports = documentAI;
 
 

@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@google-cloud/documentai": "^3.1.0"
+  },
+
+  "type": "commonjs"
+}

@@ -15,7 +15,12 @@
   "dependencies": {
     "@google-cloud/language": "^4.3.1",
     "chrono-node": "^2.3.2",
+    "cors": "^2.8.5",
+    "eol": "^0.9.1",
     "express": "^4.17.1",
+    "express-fileupload": "^1.2.1",
+    "google-auth-library": "^7.10.1",
+    "googleapis": "^39.2.0",
     "mongoose": "^6.0.12"
   }
 }

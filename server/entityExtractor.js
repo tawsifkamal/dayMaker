@@ -16,9 +16,22 @@ async function entityExtractor(textEntities) {
     const result = await client.analyzeEntities({document: document});
 
   
-    return result[0].entities.filter(entity => entity.type === 'DATE');
-    
+    const dates = result[0].entities.filter(entity => entity.type === 'DATE');
+    // const titles = result[0].entities.filter(entity => entity.type === 'OTHER' || entity.type === 'WORK_OF_ART' || entity.type === 'OTHER');
+    return dates;
   }
 
 module.exports = entityExtractor;
 
+// const result = entityExtractor("Oct. 5 – Lecture: Henry Ford and Abner Shutt: Wealth and Work in the Model-T Age")
+
+// result.then(res =>  {
+//   // month index is the actual month - 1 
+//   const monthIndex = parseInt(res[0].metadata.month - 1);
+//   const day = parseInt(res[0].metadata.day);
+//   const year = 2021
+
+//   const date = new Date(year, monthIndex, day);
+//   console.log(date);
+//   }
+// );
