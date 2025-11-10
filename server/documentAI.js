@@ -1,3 +1,4 @@
+// Import necessary modules
 const fs = require('fs');
 const entityExtractor = require("./entityExtractor.js");
 const projectId = 'peerless-haiku-291412';
@@ -8,18 +9,16 @@ const eol = require("eol");
 const { insertEvent } = require('./calendar');
 const { createEvent } = require('./calendar');
 
+// Import the Google Cloud Document AI client library
 const {DocumentProcessorServiceClient} =
   require('@google-cloud/documentai').v1;
 
-// Instantiates a client
-// apiEndpoint regions available: eu-documentai.googleapis.com, us-documentai.googleapis.com (Required if using eu based processor)
-// const client = new DocumentProcessorServiceClient({apiEndpoint: 'eu-documentai.googleapis.com'});
+// Instantiates a client for the Document AI API
 const client = new DocumentProcessorServiceClient();
 
+// The main function that processes the PDF with Document AI
 const documentAI = async function() {
-  // The full resource name of the processor, e.g.:
-  // projects/project-id/locations/location/processor/processor-id
-  // You must create new processors in the Cloud Console first
+  // The full resource name of the processor
   const name = `projects/${projectId}/locations/${location}/processors/${processorId}`;
 
   // Read the file into memory.
@@ -29,6 +28,7 @@ const documentAI = async function() {
   // Convert the image data to a Buffer and base64 encode it.
   const encodedImage = Buffer.from(imageFile).toString('base64');
 
+  // Create the request object for the Document AI API
   const request = {
     name,
     rawDocument: {
@@ -43,7 +43,8 @@ const documentAI = async function() {
 
   //Get all of the document text as one big string
   const {text} = document;
-  // Extract shards from the text field
+
+  // Helper function to extract text from a text anchor
   const getText = textAnchor => {
     if (!textAnchor.textSegments || textAnchor.textSegments.length === 0) {
       return '';
@@ -53,55 +54,50 @@ const documentAI = async function() {
     const endIndex = textAnchor.textSegments[0].endIndex;
     return text.substring(startIndex, endIndex);
   };
-  // Read the text recognition output from the processor
+
+  // Get the first page of the document
   const [page1] = document.pages;
   const {paragraphs} = page1;
   
+  // Iterate over each paragraph in the document
   for (const paragraph of paragraphs) {
     const paragraphText = getText(paragraph.layout.textAnchor);
     const entity = await entityExtractor(paragraphText);
 
-    // Checking if the entity objecdt has a type date property
+    // Check if the paragraph contains a date entity
     if (entity.length != 0) {
-      // console.log("\n===================== Section With Date ===============");
-      // console.log('>>>>>>>> Paragraph <<<<<<<<<<')
-      // console.log(paragraphText);
-
-      // split paragraph into lines 
+      // Split the paragraph into lines
       let lines =  eol.split(paragraphText);
 
+      // Iterate over each line in the paragraph
       for (const [index, line] of lines.entries()) {
         const lineEntity = await entityExtractor(line);
         
+        // Check if the line contains a date entity
         if (lineEntity.length != 0) {
-          // console.log(`********* Line ${index + 1} Date *********`);
-          // console.log(lineEntity[0].name);
-
-          // Finding the title of that line with a date entity
+          // Extract the title of the event from the line
           let title = line.replace(lineEntity[0].name, "");
           title = title.replace("–", "");
 
-          // MonthIndex is actually one less than the actual month (Jan starts at 0)
+          // Extract the date from the entity metadata
           const monthIndex = parseInt(lineEntity[0].metadata.month - 1);
           const day = parseInt(lineEntity[0].metadata.day);
           const year = 2021;
 
+          // Check if the date is valid
           if (isNaN(monthIndex) || isNaN(day)) {
               console.log("No month/day was specified. This event cannot be created.")
           } else {
+              // Create a Google Calendar event
               console.log("Event Detected!");
               const event = createEvent(year, monthIndex, day, title);
               insertEvent(event);
           }
-          
-          // console.log(`>>>>>>>>>>>>>>>>> TITLE FOR LINE ${index + 1} DATE <<<<<<<<<<<<<<<<<<<<`)
-          // console.log(title);
         }
       }
     }
   } 
 }
 
+// Export the documentAI function
 module.exports = documentAI;
-
-
