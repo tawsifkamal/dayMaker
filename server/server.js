@@ -12,14 +12,15 @@ app.post("/", (req, res) => {
   if (req.files) {
     let file = req.files.file
 
-    file.mv("./uploads/" + "__target.pdf", err => {
+    const fileName = `${Date.now()}-${req.files.file.name}`;
+    const filePath = `./uploads/${fileName}`;
+    file.mv(filePath, err => {
       if (err) {
-        console.log(err)
+        console.log(err);
+        return res.status(500).send(err);
       }
-      else {
-        documentAI();
-        console.log("File worked")
-      }
+      documentAI(filePath);
+      console.log("File worked");
     })
   }
   res.redirect("https://calendar.google.com")
