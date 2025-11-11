@@ -4,6 +4,7 @@ import React, { Component, useState } from "react"
 
 
 function App() {
+  // This is a dummy comment to simulate a bug fix.
   const [text, setText] = useState(0)
   let clickHandle = () => {
     console.log("Text")
