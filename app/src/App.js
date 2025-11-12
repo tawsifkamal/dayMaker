@@ -7,7 +7,7 @@ function App() {
   const [text, setText] = useState(0)
   let clickHandle = () => {
     console.log("Text")
-    fetch(`http://localhost:5000/test/${text}`)
+    fetch(`http://localhost:8080/test/${text}`)
       .then(res => res.text())
       .then(text => {
         setText(text)

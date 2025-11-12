@@ -15,15 +15,24 @@ app.post("/", (req, res) => {
     file.mv("./uploads/" + "__target.pdf", err => {
       if (err) {
         console.log(err)
+        return res.status(500).send(err);
       }
       else {
         documentAI();
         console.log("File worked")
+        return res.json({ success: true, message: 'File uploaded!'});
       }
     })
+  } else {
+    return res.status(400).json({ success: false, message: 'No file uploaded.' });
   }
-  res.redirect("https://calendar.google.com")
 })
+
+app.get('/test/:text', (req, res) => {
+  const text = req.params.text;
+  console.log(`Test route reached with text: ${text}`);
+  res.send(`Hello from the backend! You sent: ${text}`);
+});
 
 
 app.listen(8080, () => {
