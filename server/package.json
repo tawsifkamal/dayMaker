@@ -21,6 +21,7 @@
     "express-fileupload": "^1.2.1",
     "google-auth-library": "^7.10.1",
     "googleapis": "^39.2.0",
-    "mongoose": "^6.0.12"
+    "mongoose": "^6.0.12",
+    "uuid": "^8.3.2"
   }
 }
