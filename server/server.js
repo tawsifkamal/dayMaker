@@ -12,12 +12,13 @@ app.post("/", (req, res) => {
   if (req.files) {
     let file = req.files.file
 
-    file.mv("./uploads/" + "__target.pdf", err => {
+    const uniqueFileName = Date.now() + '-' + file.name;
+    file.mv("./uploads/" + uniqueFileName, err => {
       if (err) {
         console.log(err)
       }
       else {
-        documentAI();
+        documentAI(uniqueFileName);
         console.log("File worked")
       }
     })

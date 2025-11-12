@@ -3,7 +3,6 @@ const entityExtractor = require("./entityExtractor.js");
 const projectId = 'peerless-haiku-291412';
 const location = 'us'; // Format is 'us' or 'eu'
 const processorId = '83eb2115a9ff84ef'; // Create processor in Cloud Console
-const filePath = 'uploads/__target.pdf';
 const eol = require("eol");
 const { insertEvent } = require('./calendar');
 const { createEvent } = require('./calendar');
@@ -16,11 +15,12 @@ const {DocumentProcessorServiceClient} =
 // const client = new DocumentProcessorServiceClient({apiEndpoint: 'eu-documentai.googleapis.com'});
 const client = new DocumentProcessorServiceClient();
 
-const documentAI = async function() {
+const documentAI = async function(fileName) {
   // The full resource name of the processor, e.g.:
   // projects/project-id/locations/location/processor/processor-id
   // You must create new processors in the Cloud Console first
   const name = `projects/${projectId}/locations/${location}/processors/${processorId}`;
+  const filePath = `uploads/${fileName}`;
 
   // Read the file into memory.
   const fs = require('fs').promises;
