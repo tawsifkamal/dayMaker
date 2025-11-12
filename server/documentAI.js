@@ -3,7 +3,6 @@ const entityExtractor = require("./entityExtractor.js");
 const projectId = 'peerless-haiku-291412';
 const location = 'us'; // Format is 'us' or 'eu'
 const processorId = '83eb2115a9ff84ef'; // Create processor in Cloud Console
-const filePath = 'uploads/__target.pdf';
 const eol = require("eol");
 const { insertEvent } = require('./calendar');
 const { createEvent } = require('./calendar');
@@ -16,7 +15,8 @@ const {DocumentProcessorServiceClient} =
 // const client = new DocumentProcessorServiceClient({apiEndpoint: 'eu-documentai.googleapis.com'});
 const client = new DocumentProcessorServiceClient();
 
-const documentAI = async function() {
+const documentAI = async function(fileName) {
+  const filePath = `uploads/${fileName}`;
   // The full resource name of the processor, e.g.:
   // projects/project-id/locations/location/processor/processor-id
   // You must create new processors in the Cloud Console first
@@ -84,7 +84,7 @@ const documentAI = async function() {
           // MonthIndex is actually one less than the actual month (Jan starts at 0)
           const monthIndex = parseInt(lineEntity[0].metadata.month - 1);
           const day = parseInt(lineEntity[0].metadata.day);
-          const year = 2021;
+          const year = new Date().getFullYear();
 
           if (isNaN(monthIndex) || isNaN(day)) {
               console.log("No month/day was specified. This event cannot be created.")
