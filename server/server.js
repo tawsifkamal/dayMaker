@@ -1,11 +1,17 @@
 const express = require('express')
 const app = express()
 const upload = require('express-fileupload')
+const cors = require('cors');
+app.use(cors());
 app.use(upload())
 const documentAI = require('./documentAI');
 
 // get driver connection
 app.use(express.static('public'))
+
+app.get('/test/:text', (req, res) => {
+  res.send('hello world')
+})
 
 app.post("/", (req, res) => {
   console.log("route reached")
@@ -26,6 +32,6 @@ app.post("/", (req, res) => {
 })
 
 
-app.listen(8080, () => {
-  console.log("Running on port 8080")
+app.listen(5000, () => {
+  console.log("Running on port 5000")
 })
