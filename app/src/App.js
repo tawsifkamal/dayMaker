@@ -1,3 +1,4 @@
+// This is a test comment for a test PR.
 import logo from './logo.svg';
 import './App.css';
 import React, { Component, useState } from "react"
@@ -26,11 +27,11 @@ function App() {
         </p>
         <a
           className="App-link"
-          href="http://localhost:5000/test"
+          href="https://reactjs.org"
           target="_blank"
           rel="noopener noreferrer"
         >
-          {text}
+          Learn React
         </a>
       </header>
     </div>
