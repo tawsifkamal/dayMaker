@@ -26,6 +26,10 @@ app.post("/", (req, res) => {
 })
 
 
-app.listen(8080, () => {
-  console.log("Running on port 8080")
+app.get('/test', (req, res) => {
+  res.send('Backend connected');
+});
+
+app.listen(5000, () => {
+  console.log("Running on port 5000")
 })
