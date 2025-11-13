@@ -5,13 +5,13 @@ const { google } = require('googleapis');
 const calendar = google.calendar({ version: 'v3', auth: oAuth2Client })
 
 /**
- * Creates an event in the users google calendar. 
+ * Creates an event object suitable for the Google Calendar API.
  * 
- * @param {*} year 
- * @param {*} monthIndex 
- * @param {*} day 
- * @param {*} title 
- * @returns 
+ * @param {number} year - The year of the event.
+ * @param {number} monthIndex - The month index (0-11).
+ * @param {number} day - The day of the month.
+ * @param {string} title - The title/summary of the event.
+ * @returns {Object} The event object formatted for Google Calendar.
  */
 const createEvent = (year, monthIndex, day, title) => {
   let date = new Date(year, monthIndex, day);
@@ -30,6 +30,18 @@ const createEvent = (year, monthIndex, day, title) => {
   }
 }
 
+/**
+ * Inserts an event into the user's primary Google Calendar.
+ *
+ * @param {Object} event - The event object to insert.
+ * @param {Object} event.summary - The title of the event.
+ * @param {Object} event.start - The start time object.
+ * @param {string} event.start.date - The start date in 'YYYY-MM-DD' format.
+ * @param {string} event.start.timeZone - The time zone for the start date.
+ * @param {Object} event.end - The end time object.
+ * @param {string} event.end.date - The end date in 'YYYY-MM-DD' format.
+ * @param {string} event.end.timeZone - The time zone for the end date.
+ */
 const insertEvent = (event) => {
   calendar.events.insert(
     { calendarId: 'primary', resource: event },
