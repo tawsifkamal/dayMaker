@@ -3,8 +3,20 @@ import './App.css';
 import React, { Component, useState } from "react"
 
 
+/**
+ * The main component of the React application.
+ * Currently, it includes a basic state demonstration fetching data from a test endpoint.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered component.
+ */
 function App() {
   const [text, setText] = useState(0)
+
+  /**
+   * Handles the click event.
+   * Fetches data from the backend and updates the state.
+   */
   let clickHandle = () => {
     console.log("Text")
     fetch(`http://localhost:5000/test/${text}`)

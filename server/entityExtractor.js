@@ -1,3 +1,12 @@
+/**
+ * Extracts entities from the provided text using Google Cloud Natural Language API.
+ * Specifically filters for entities of type 'DATE'.
+ *
+ * @async
+ * @function entityExtractor
+ * @param {string} textEntities - The text content to analyze for entities.
+ * @returns {Promise<Array<Object>>} A promise that resolves to an array of date entity objects.
+ */
 async function entityExtractor(textEntities) {
     // Imports the Google Cloud client library
     const language = require('@google-cloud/language');

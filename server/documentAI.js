@@ -16,6 +16,14 @@ const {DocumentProcessorServiceClient} =
 // const client = new DocumentProcessorServiceClient({apiEndpoint: 'eu-documentai.googleapis.com'});
 const client = new DocumentProcessorServiceClient();
 
+/**
+ * Processes a PDF document using Google Cloud Document AI.
+ * Extracts text, identifies entities (dates), and creates Google Calendar events.
+ *
+ * @async
+ * @function documentAI
+ * @returns {Promise<void>}
+ */
 const documentAI = async function() {
   // The full resource name of the processor, e.g.:
   // projects/project-id/locations/location/processor/processor-id
@@ -43,7 +51,12 @@ const documentAI = async function() {
 
   //Get all of the document text as one big string
   const {text} = document;
-  // Extract shards from the text field
+
+  /**
+   * Extracts text from a text anchor.
+   * @param {Object} textAnchor - The text anchor object from Document AI.
+   * @returns {string} The extracted text.
+   */
   const getText = textAnchor => {
     if (!textAnchor.textSegments || textAnchor.textSegments.length === 0) {
       return '';
