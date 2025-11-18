@@ -16,7 +16,7 @@ async function entityExtractor(textEntities) {
     const result = await client.analyzeEntities({document: document});
 
   
-    const dates = result[0].entities.filter(entity => entity.type === 'DATE');
+    const dates = result[0].entities.filter(entity => entity.type === 'DATE' && entity.metadata.year);
     // const titles = result[0].entities.filter(entity => entity.type === 'OTHER' || entity.type === 'WORK_OF_ART' || entity.type === 'OTHER');
     return dates;
   }
