@@ -1,2 +1,6 @@
 package-lock.json
 app/src/App.js
+server.log
+*.pdf
+*.tex
+uploads/

@@ -84,9 +84,9 @@ const documentAI = async function() {
           // MonthIndex is actually one less than the actual month (Jan starts at 0)
           const monthIndex = parseInt(lineEntity[0].metadata.month - 1);
           const day = parseInt(lineEntity[0].metadata.day);
-          const year = 2021;
+          const year = parseInt(lineEntity[0].metadata.year);
 
-          if (isNaN(monthIndex) || isNaN(day)) {
+          if (isNaN(monthIndex) || isNaN(day) || isNaN(year)) {
               console.log("No month/day was specified. This event cannot be created.")
           } else {
               console.log("Event Detected!");
