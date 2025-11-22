@@ -21,8 +21,8 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" onClick={clickHandle} alt="logo" />
         <button onClick={clickHandle}>{text}</button>
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
+        <p data-testid="edit-text">
+          Edit <code>src/App.js</code> and save to reload. 👋
         </p>
         <a
           className="App-link"
