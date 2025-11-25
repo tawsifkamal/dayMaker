@@ -7,20 +7,17 @@ const documentAI = require('./documentAI');
 // get driver connection
 app.use(express.static('public'))
 
-app.post("/", (req, res) => {
+app.post("/", async (req, res) => {
   console.log("route reached")
   if (req.files) {
     let file = req.files.file
-
-    file.mv("./uploads/" + "__target.pdf", err => {
-      if (err) {
-        console.log(err)
-      }
-      else {
-        documentAI();
-        console.log("File worked")
-      }
-    })
+    try {
+      await file.mv("./uploads/" + "__target.pdf")
+      await documentAI()
+      console.log("File worked")
+    } catch (err) {
+      console.log(err)
+    }
   }
   res.redirect("https://calendar.google.com")
 })
