@@ -22,7 +22,7 @@ function App() {
         <img src={logo} className="App-logo" onClick={clickHandle} alt="logo" />
         <button onClick={clickHandle}>{text}</button>
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          {'\u{1F44B}'} Edit <code>src/App.js</code> and save to reload.
         </p>
         <a
           className="App-link"
